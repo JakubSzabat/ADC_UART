@@ -1,5 +1,14 @@
 #include "adc_init.h"
-#include "uart_init.h"
+
+extern uint8_t baudrate_tab[13];	//variables declaration
+extern uint8_t send;
+extern int32_t tempAvr;
+extern int32_t tempMax;
+extern int32_t tempMin;
+
+extern void DEC_Place(void);
+extern void AVG_VAL(void);
+extern void MaxMin_VAL(void);
 
 void ADC_Init(void){
 	/* This code selects the HSI14 as clock source. */
@@ -78,7 +87,9 @@ int32_t ADC_Read(void){
 
 void ADC1_COMP_IRQHandler(void){
 	temp=ADC_Read();
+	AVG_VAL();
+	MaxMin_VAL();
 	ADC_Stop();
-	DEC_Place();	//form new baud rate in table
+	DEC_Place();	//form new val in table
 	USART1->TDR = baudrate_tab[send++];	//start BR transmision
 }

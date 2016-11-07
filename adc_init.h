@@ -1,3 +1,5 @@
+#ifndef ADC_INIT_H
+#define ADC_INIT_H
 #include "stm32f0xx.h"
 
 #define TEMP110_CAL_ADDR ((uint16_t*) ((uint32_t) 0x1FFFF7C2))	//wartosci zadane przez producenta do skalibrowania miernika
@@ -11,3 +13,5 @@ void ADC_Init(void);
 void ADC_Start(void);
 void ADC_Stop(void);
 int32_t ADC_Read(void);
+
+#endif

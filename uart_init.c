@@ -2,6 +2,7 @@
 
 extern volatile int32_t temp;
 
+
 __INLINE void GPIO_Init(void){
 	RCC->AHBENR  |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN;		//GPIOA clock enable
 	GPIOA->MODER = (GPIOA->MODER & ~(GPIO_MODER_MODER9 | GPIO_MODER_MODER10))
@@ -61,22 +62,36 @@ void USART1_IRQHandler(void){
   }
 }
 
-__INLINE void DEC_Place(void){											 //format BR into char ASCII table
+__INLINE void DEC_Place(){											 //format BR into char ASCII table
 	
-	uint32_t baudrate = temp;
 	baudrate_tab[0] =  0x0D;					//send return
-	baudrate_tab[1] =  baudrate/100000;
-	baudrate_tab[2] = (baudrate-baudrate_tab[1]*100000)/10000;
-	baudrate_tab[3] = (baudrate-baudrate_tab[1]*100000-baudrate_tab[2]*10000)/1000;
-	baudrate_tab[4] = (baudrate-baudrate_tab[1]*100000-baudrate_tab[2]*10000-baudrate_tab[3]*1000)/100;
-	baudrate_tab[5] = (baudrate-baudrate_tab[1]*100000-baudrate_tab[2]*10000-baudrate_tab[3]*1000-baudrate_tab[4]*100)/10;
-	baudrate_tab[6] = (baudrate-baudrate_tab[1]*100000-baudrate_tab[2]*10000-baudrate_tab[3]*1000-baudrate_tab[4]*100-baudrate_tab[5]*10);
-	baudrate_tab[7] =  0x0A;					//send new-line
+	baudrate_tab[1] =  temp/10;
+	baudrate_tab[2] = (temp-baudrate_tab[1]*10);
+	baudrate_tab[3] =  0xA;
+	baudrate_tab[4] =  tempAvr/10;
+	baudrate_tab[5] = (tempAvr-baudrate_tab[4]*10);
+	baudrate_tab[6] =  0xA;
+	baudrate_tab[7] =  tempMax/10;
+	baudrate_tab[8] = (tempMax-baudrate_tab[7]*10);
+	baudrate_tab[9] =  0xA;
+	baudrate_tab[10] =  tempMin/10;
+	baudrate_tab[11] = (tempMin-baudrate_tab[10]*10);
+	baudrate_tab[12] =  0x0A;					//send new-line
 	
-	baudrate_tab[1] += 0x30;	//turn into ascii
-	baudrate_tab[2] += 0x30;
-	baudrate_tab[3] += 0x30;
-	baudrate_tab[4] += 0x30;
-	baudrate_tab[5] += 0x30;
-	baudrate_tab[6] += 0x30;
+	for(int i = 1; i<12; ++i){
+			baudrate_tab[i] += 0x30;
+	}
 }
+
+__INLINE void AVG_VAL(void){
+	int static count = 1;
+	int static total = 0;
+	total += temp;
+	tempAvr = total/(count++);
+}
+
+__INLINE void MaxMin_VAL(void){
+	if (temp > tempMax) tempMax = temp;
+	if (temp < tempMin) tempMin = temp;
+}
+
