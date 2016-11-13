@@ -2,18 +2,18 @@
 #define UART_INIT_H
 #include "stm32f0xx.h"
 
-#define DEF_BR 9600
+#define DEF_BR 9600 //default baudrate
 
-uint8_t baudrate_tab[13] = {0x0D,0,0,0,0,0,0,0,0,0,0,0,0x0A};	//variables declaration
-uint8_t send = 0;
-int32_t tempAvr = 0;
-int32_t tempMax = 0;
-int32_t tempMin = 100;
+extern uint8_t value_tab[13];	//variables declaration
+extern uint8_t volatile send;
+extern int32_t tempAvr;
+extern int32_t tempMax;
+extern int32_t tempMin;
 
-void UART_Init(void);	//function declaration
-void GPIO_Init(void);
-void DEC_Place(void);
-void AVG_VAL(void);
-void MaxMin_VAL(void);
+extern void UART_Init(void);	//function declaration
+extern void GPIO_Init(void);
+extern void DEC_Place(void);
+extern void AVG_VAL(void);
+extern void MaxMin_VAL(void);
 
 #endif
