@@ -4,8 +4,8 @@
 uint8_t value_tab[13] = {0x0D,0,0,0,0,0,0,0,0,0,0,0,0x0A};	//variables declaration
 uint8_t volatile send = 0;
 int32_t tempAvr = 0;
-int32_t tempMax = 0;
-int32_t tempMin = 100;
+int32_t tempMax = INT32_MIN;
+int32_t tempMin = INT32_MAX;
 
 void UART_Init(void);	//function declaration
 void GPIO_Init(void);
