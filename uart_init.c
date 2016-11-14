@@ -63,9 +63,11 @@ void USART1_IRQHandler(void){
   }
   else if((USART1->ISR & USART_ISR_RXNE) == USART_ISR_RXNE)
   {
-    //chartoreceive = (uint8_t)(USART1->RDR);/* Receive data, clear flag */
-		USART1->RDR;	//clear flag by reading RDR
-		ADC_Start();
+    uint8_t chartoreceive = (uint8_t)(USART1->RDR);// Receive data, clear flag
+		//USART1->RDR;	//clear flag by reading RDR
+		if(chartoreceive == 'C'){
+			ADC_Start();
+		}
   }
   else
   {
